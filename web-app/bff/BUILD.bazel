@@ -1,0 +1,41 @@
+cc_library(
+    name = "handler",
+    srcs = ["handler.cc"],
+    hdrs = ["handler.h"],
+    deps = [
+        "//shared/proto:ui_cc_proto",
+        "@abseil-cpp//absl/log",
+        "@abseil-cpp//absl/status",
+        "@abseil-cpp//absl/strings",
+        "@cpp-httplib//:cpp-httplib",
+        "@protobuf",
+    ],
+)
+
+cc_test(
+    name = "handler_test",
+    srcs = ["handler_test.cc"],
+    deps = [
+        ":handler",
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+    ],
+)
+
+cc_binary(
+    name = "main",
+    srcs = ["main.cc"],
+    data = ["//web-app/ui:dist_files"],
+    deps = [
+        ":handler",
+        "//shared/proto:ui_cc_proto",
+        "@abseil-cpp//absl/flags:flag",
+        "@abseil-cpp//absl/log:check",
+        "@abseil-cpp//absl/log:log",
+        "@abseil-cpp//absl/status",
+        "@abseil-cpp//absl/status:statusor",
+        "@abseil-cpp//absl/strings",
+        "@cpp-httplib//:cpp-httplib",
+        "@protobuf",
+    ],
+)

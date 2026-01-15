@@ -1,0 +1,29 @@
+# Bazel
+/bazel-*
+.bazelrc.user
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# IDEs
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# MacOS
+.DS_Store
+
+# Tooling
+compile_commands.json
+.cache/
+.aspect/

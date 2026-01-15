@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package warehouse;
+
+// The Service Definition
+service WarehouseService {
+    rpc GetInventory(GetInventoryRequest) returns (GetInventoryResponse);
+}
+
+message InventoryItem {
+    string id = 1;
+    string name = 2;
+    int32 count = 3;
+}
+
+message GetInventoryRequest {
+    string warehouse_id = 1;
+}
+
+message GetInventoryResponse {
+    repeated InventoryItem items = 1;
+}

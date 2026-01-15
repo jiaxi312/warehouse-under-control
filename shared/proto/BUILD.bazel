@@ -1,0 +1,24 @@
+load("@protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+package(default_visibility = ["//visibility:public"])
+
+proto_library(
+    name = "warehouse_proto",
+    srcs = ["warehouse.proto"],
+)
+
+cc_proto_library(
+    name = "warehouse_cc_proto",
+    deps = [":warehouse_proto"],
+)
+
+proto_library(
+    name = "ui_proto",
+    srcs = ["ui.proto"],
+)
+
+cc_proto_library(
+    name = "ui_cc_proto",
+    deps = [":ui_proto"],
+)

@@ -1,0 +1,15 @@
+# Enable Bzlmod (Modern dependency management)
+common --enable_bzlmod
+
+# Force the use of our registered LLVM toolchain instead of host GCC/Clang
+build --incompatible_enable_cc_toolchain_resolution
+
+# Standardize C++ build options
+build --cxxopt=-std=c++17
+build --strip=never
+
+# Output settings for better debugging
+build --verbose_failures
+test --test_output=errors
+
+build --jobs=1000

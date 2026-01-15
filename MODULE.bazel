@@ -1,0 +1,60 @@
+module(
+    name = "warehouse_under_control",
+    version = "0.1.0",
+)
+
+# --- C++ & HERMETIC TOOLCHAIN ---
+# rules_cc 0.2.16 is the latest stable release (Jan 2026)
+bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "abseil-cpp", version = "20240722.0")
+bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "toolchains_llvm", version = "1.6.0")
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    name = "llvm_toolchain",
+    llvm_version = "18.1.8",  # Upgrade to 18.1.8 for better macOS support
+)
+use_repo(llvm, "llvm_toolchain")
+
+register_toolchains("@llvm_toolchain//:all")
+
+# --- PROTOBUF ---
+bazel_dep(name = "rules_proto", version = "7.1.0")
+bazel_dep(name = "protobuf", version = "33.2")
+bazel_dep(name = "grpc", version = "1.76.0")
+
+# --- WEB & TS (ASPECT RULES) ---
+bazel_dep(name = "aspect_rules_js", version = "2.1.0")
+bazel_dep(name = "aspect_rules_ts", version = "3.1.0")
+bazel_dep(name = "rules_nodejs", version = "6.3.3")
+
+# 1. Node.js Toolchain
+node = use_extension("@rules_nodejs//nodejs:extensions.bzl", "node")
+node.toolchain(node_version = "22.12.0")
+
+# 2. NPM extension (for managing node_modules)
+npm = use_extension("@aspect_rules_js//npm:extensions.bzl", "npm")
+npm.npm_translate_lock(
+    name = "npm",
+    data = ["//web-app/ui:package.json"],
+    pnpm_lock = "//web-app/ui:pnpm-lock.yaml",
+    update_pnpm_lock = True,
+)
+use_repo(npm, "npm")
+
+# 3. PNPM extension (to provide the 'bazel run @pnpm' command)
+pnpm = use_extension("@aspect_rules_js//npm:extensions.bzl", "pnpm")
+pnpm.pnpm(name = "pnpm")  # This initializes the pnpm repository
+use_repo(pnpm, "pnpm")  # This makes @pnpm visible to you
+
+# --- BFF ---
+bazel_dep(name = "cpp-httplib", version = "0.22.0")
+
+# --- DEV TOOLS ---
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "abb61a688167623088f8768cc9264798df6a9d10",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+)

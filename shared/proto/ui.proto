@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package warehouse.ui;
+
+message Person {
+    string name = 1;
+}
+
+message Greet {
+    string message = 1;
+}
