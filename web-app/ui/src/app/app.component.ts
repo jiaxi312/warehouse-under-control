@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [CommonModule],
-    template: `<h1>Welcome to Warehouse Under Control</h1>`,
-    styles: [],
+    imports: [RouterOutlet],
+    template: '<router-outlet></router-outlet>',
 })
 export class AppComponent {
-    title = 'ui';
 }

@@ -35,4 +35,35 @@ void HandlerImpl::HandleGreet(const httplib::Request &request,
   response.set_content(json_output, "application/json");
 }
 
+void HandlerImpl::HandleLogin(const httplib::Request &request,
+                              httplib::Response &response) {
+  LoginRequest login_request;
+  if (absl::Status status = JsonStringToMessage(request.body, &login_request);
+      !status.ok()) {
+    LOG(ERROR) << "Failed to parse JSON: " << status;
+    response.status = 400;
+    return;
+  }
+
+  LoginResponse login_response;
+  if (login_request.code() == "123456") {
+    login_response.set_success(true);
+    login_response.set_message("Login Successful");
+    response.status = 200;
+  } else {
+    login_response.set_success(false);
+    login_response.set_message("Invalid code");
+    response.status = 401;
+  }
+
+  std::string json_output;
+  if (absl::Status status = MessageToJsonString(login_response, &json_output);
+      !status.ok()) {
+    LOG(ERROR) << "Failed to serialize JSON: " << status;
+    response.status = 500;
+    return;
+  }
+  response.set_content(json_output, "application/json");
+}
+
 } // namespace warehouse::ui

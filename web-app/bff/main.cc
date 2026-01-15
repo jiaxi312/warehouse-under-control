@@ -32,6 +32,7 @@ absl::Status RealMain() {
 
   // 2. API Endpoint (Standard POST)
   REGISTER_HANDLER("/api/greet", HandleGreet);
+  REGISTER_HANDLER("/api/login", HandleLogin);
 
   LOG(INFO) << "Server running on http://localhost:"
             << absl::GetFlag(FLAGS_port);

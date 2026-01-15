@@ -44,5 +44,38 @@ TEST(HandlerTest, Greet) {
   EXPECT_THAT(response.body, HasSubstr("Hello World"));
 }
 
+TEST(HandleLogin, LoginInvalidJson) {
+  HandlerImpl handler;
+  httplib::Request request;
+  request.body = "invalid json";
+  httplib::Response response;
+
+  handler.HandleLogin(request, response);
+
+  EXPECT_THAT(response.status, Eq(400));
+}
+
+TEST(HandleLogin, LoginInvalidCode) {
+  HandlerImpl handler;
+  httplib::Request request;
+  request.body = R"({"code": "invalid code"})";
+  httplib::Response response;
+
+  handler.HandleLogin(request, response);
+
+  EXPECT_THAT(response.status, Eq(401));
+}
+
+TEST(HandleLogin, LoginSuccess) {
+  HandlerImpl handler;
+  httplib::Request request;
+  request.body = R"({"code": "123456"})";
+  httplib::Response response;
+
+  handler.HandleLogin(request, response);
+
+  EXPECT_THAT(response.status, Eq(200));
+}
+
 } // namespace
 } // namespace warehouse::ui

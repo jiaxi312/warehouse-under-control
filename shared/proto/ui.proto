@@ -9,3 +9,12 @@ message Person {
 message Greet {
     string message = 1;
 }
+
+message LoginRequest {
+    string code = 1;
+}
+
+message LoginResponse {
+    bool success = 1;
+    string message = 2;
+}
